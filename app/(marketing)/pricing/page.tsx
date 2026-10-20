@@ -30,7 +30,7 @@ export default function PricingPage() {
             { name: 'Advanced integrations', included: false },
           ]}
           buttonText="Sign Up Free"
-          buttonLink="/auth/signup"
+          buttonLink="/signup"
         />
 
         {/* Pro Plan */}
@@ -49,7 +49,6 @@ export default function PricingPage() {
             { name: 'Advanced integrations', included: false },
           ]}
           buttonText="Coming Soon"
-          buttonLink="#"
           highlighted
           badge="Popular"
         />
@@ -69,7 +68,6 @@ export default function PricingPage() {
             { name: 'Advanced integrations', included: true },
           ]}
           buttonText="Contact Sales"
-          buttonLink="mailto:sales@linearclone.com"
         />
       </div>
 
@@ -80,12 +78,14 @@ export default function PricingPage() {
         <p className="text-lg text-gray-400 dark:text-gray-300 mb-8">
           Contact our sales team to discuss your specific requirements.
         </p>
-        <a
-          href="mailto:sales@linearclone.com"
-          className="inline-flex h-10 items-center justify-center rounded-md bg-blue-600 px-8 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-700"
+        <button
+          type="button"
+          disabled
+          title="Coming soon"
+          className="inline-flex h-10 items-center justify-center rounded-md bg-blue-600 px-8 py-2 text-sm font-medium text-white shadow cursor-not-allowed opacity-50"
         >
           Contact Sales
-        </a>
+        </button>
       </div>
     </div>
   )
@@ -103,7 +103,7 @@ interface PricingCardProps {
   description: string
   features: PricingFeature[]
   buttonText: string
-  buttonLink: string
+  buttonLink?: string
   highlighted?: boolean
   badge?: string
 }
@@ -160,16 +160,31 @@ function PricingCard({
           </li>
         ))}
       </ul>
-      <Link
-        href={buttonLink}
-        className={`w-full inline-flex h-10 items-center justify-center rounded-md px-8 py-2 text-sm font-medium shadow transition-colors ${
-          highlighted
-            ? 'bg-blue-600 text-white hover:bg-blue-700'
-            : 'bg-gray-800 border border-gray-700 hover:bg-gray-700 text-white'
-        }`}
-      >
-        {buttonText}
-      </Link>
+      {buttonLink ? (
+        <Link
+          href={buttonLink}
+          className={`w-full inline-flex h-10 items-center justify-center rounded-md px-8 py-2 text-sm font-medium shadow transition-colors ${
+            highlighted
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              : 'bg-gray-800 border border-gray-700 hover:bg-gray-700 text-white'
+          }`}
+        >
+          {buttonText}
+        </Link>
+      ) : (
+        <button
+          type="button"
+          disabled
+          title="Coming soon"
+          className={`w-full inline-flex h-10 items-center justify-center rounded-md px-8 py-2 text-sm font-medium shadow cursor-not-allowed opacity-50 ${
+            highlighted
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-800 border border-gray-700 text-white'
+          }`}
+        >
+          {buttonText}
+        </button>
+      )}
     </div>
   )
 }
