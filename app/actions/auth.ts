@@ -79,7 +79,14 @@ export const signIn = async (formData: FormData): Promise<ActionResponse> => {
       }
     }
 
-    await createSession(user.id)
+    const sessionCreated = await createSession(user.id)
+    if (!sessionCreated) {
+      return {
+        success: false,
+        message: 'Unable to sign in. Please try again.',
+        error: 'Failed to create session',
+      }
+    }
 
     return {
       success: true,
@@ -134,7 +141,15 @@ export const signUp = async (formData: FormData): Promise<ActionResponse> => {
       }
     }
 
-    await createSession(user.id)
+    const sessionCreated = await createSession(user.id)
+    if (!sessionCreated) {
+      return {
+        success: false,
+        message:
+          'Your account was created, but we could not sign you in. Please sign in to continue.',
+        error: 'Failed to create session',
+      }
+    }
 
     return {
       success: true,
