@@ -43,6 +43,11 @@ export default function SignUpPage() {
       }
     }
   }, initialState)
+
+  const hasFieldErrors = Object.values(state.errors ?? {}).some(
+    (errors) => errors.length > 0
+  )
+
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 dark:bg-[#121212]">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -57,7 +62,7 @@ export default function SignUpPage() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white dark:bg-[#1A1A1A] py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-100 dark:border-dark-border-subtle">
           <Form action={formAction} className="space-y-6">
-            {state?.message && !state.success && (
+            {state?.message && !state.success && !hasFieldErrors && (
               <FormError>{state.message}</FormError>
             )}
 

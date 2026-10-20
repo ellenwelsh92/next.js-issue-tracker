@@ -12,7 +12,7 @@ import {
 } from '@/app/components/ui/Form'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
-import { signUp, ActionResponse } from '@/app/actions/auth'
+import { signIn, type ActionResponse } from '@/app/actions/auth'
 
 const initialState: ActionResponse = {
   success: false,
@@ -29,11 +29,11 @@ export default function SignInPage() {
     FormData
   >(async (prevState: ActionResponse, formData: FormData) => {
     try {
-      const result = await signUp(formData)
+      const result = await signIn(formData)
 
       // Handle successful submission
       if (result.success) {
-        toast.success('Account created successfully')
+        toast.success('Signed in successfully')
         router.push('/dashboard')
       }
 
@@ -46,6 +46,10 @@ export default function SignInPage() {
       }
     }
   }, initialState)
+
+  const hasFieldErrors = Object.values(state.errors ?? {}).some(
+    (errors) => errors.length > 0
+  )
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 dark:bg-[#121212]">
@@ -61,7 +65,7 @@ export default function SignInPage() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white dark:bg-[#1A1A1A] py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-100 dark:border-dark-border-subtle">
           <Form action={formAction} className="space-y-6">
-            {state?.message && !state.success && (
+            {state?.message && !state.success && !hasFieldErrors && (
               <FormError>{state.message}</FormError>
             )}
 
@@ -90,7 +94,7 @@ export default function SignInPage() {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="new-password"
+                autoComplete="current-password"
                 required
                 disabled={isPending}
                 aria-describedby="password-error"
@@ -103,30 +107,9 @@ export default function SignInPage() {
               )}
             </FormGroup>
 
-            <FormGroup>
-              <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
-              <FormInput
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                autoComplete="new-password"
-                required
-                disabled={isPending}
-                aria-describedby="confirmPassword-error"
-                className={
-                  state?.errors?.confirmPassword ? 'border-red-500' : ''
-                }
-              />
-              {state?.errors?.confirmPassword && (
-                <p id="confirmPassword-error" className="text-sm text-red-500">
-                  {state.errors.confirmPassword[0]}
-                </p>
-              )}
-            </FormGroup>
-
             <div>
               <Button type="submit" className="w-full" isLoading={isPending}>
-                Sign up
+                Sign in
               </Button>
             </div>
           </Form>
