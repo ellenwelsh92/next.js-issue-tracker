@@ -5,7 +5,7 @@ export default async function LandingPage() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16"
+      className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-14"
     >
       <div className="text-center">
         <h1

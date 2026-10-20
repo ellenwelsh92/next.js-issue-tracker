@@ -16,24 +16,28 @@ export default async function MarketingLayout({
               Mode
             </Link>
             <nav className="hidden md:flex gap-6">
-              <Link
-                href="/features"
-                className="text-sm font-medium hover:text-purple-600"
+              <button
+                type="button"
+                disabled
+                title="Coming soon"
+                className="text-sm font-medium cursor-not-allowed opacity-50"
               >
                 Features
-              </Link>
+              </button>
               <Link
                 href="/pricing"
                 className="text-sm font-medium hover:text-purple-600"
               >
                 Pricing
               </Link>
-              <Link
-                href="/faq"
-                className="text-sm font-medium hover:text-purple-600"
+              <button
+                type="button"
+                disabled
+                title="Coming soon"
+                className="text-sm font-medium cursor-not-allowed opacity-50"
               >
                 FAQ
-              </Link>
+              </button>
             </nav>
           </div>
           <div className="flex items-center gap-4">
@@ -52,11 +56,11 @@ export default async function MarketingLayout({
       <main className="flex-1">{children}</main>
 
       <footer className="border-t border-gray-200 dark:border-dark-border-subtle bg-white dark:bg-dark-base">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-6">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
             <div>
               <h3 className="text-lg font-semibold mb-4">Mode</h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 A modern project management tool built with Next.js.
               </p>
             </div>
@@ -64,28 +68,32 @@ export default async function MarketingLayout({
               <h3 className="text-sm font-semibold mb-4">Product</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link
-                    href="/features"
-                    className="text-sm text-gray-600 hover:text-purple-600"
+                  <button
+                    type="button"
+                    disabled
+                    title="Coming soon"
+                    className="text-sm text-gray-600 dark:text-gray-400 cursor-not-allowed opacity-50"
                   >
                     Features
-                  </Link>
+                  </button>
                 </li>
                 <li>
                   <Link
                     href="/pricing"
-                    className="text-sm text-gray-600 hover:text-purple-600"
+                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600"
                   >
                     Pricing
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="/faq"
-                    className="text-sm text-gray-600 hover:text-purple-600"
+                  <button
+                    type="button"
+                    disabled
+                    title="Coming soon"
+                    className="text-sm text-gray-600 dark:text-gray-400 cursor-not-allowed opacity-50"
                   >
                     FAQ
-                  </Link>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -93,22 +101,24 @@ export default async function MarketingLayout({
               <h3 className="text-sm font-semibold mb-4">Resources</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link
-                    href="/docs"
-                    className="text-sm text-gray-600 hover:text-purple-600"
+                  <button
+                    type="button"
+                    disabled
+                    title="Coming soon"
+                    className="text-sm text-gray-600 dark:text-gray-400 cursor-not-allowed opacity-50"
                   >
                     Documentation
-                  </Link>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="https://github.com/yourusername/mode"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-gray-600 hover:text-purple-600"
+                  <button
+                    type="button"
+                    disabled
+                    title="Coming soon"
+                    className="text-sm text-gray-600 dark:text-gray-400 cursor-not-allowed opacity-50"
                   >
                     GitHub
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -116,18 +126,20 @@ export default async function MarketingLayout({
               <h3 className="text-sm font-semibold mb-4">Legal</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link
-                    href="/terms"
-                    className="text-sm text-gray-600 hover:text-purple-600"
+                  <button
+                    type="button"
+                    disabled
+                    title="Coming soon"
+                    className="text-sm text-gray-600 dark:text-gray-400 cursor-not-allowed opacity-50"
                   >
                     Terms of Service
-                  </Link>
+                  </button>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="mt-8 border-t pt-8 text-center">
-            <p className="text-sm text-gray-600">
+          <div className="mt-6 border-t border-gray-200 dark:border-dark-border-subtle pt-6 text-center">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               &copy; <Timestamp /> Mode. All rights reserved.
             </p>
           </div>
