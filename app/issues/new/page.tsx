@@ -2,6 +2,7 @@ import { ArrowLeftIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import NewIssue from '@/app/components/NewIssue'
+import IssueFormSkeleton from '@/app/components/IssueFormSkeleton'
 
 export default async function NewIssuePage() {
   return (
@@ -17,7 +18,7 @@ export default async function NewIssuePage() {
       <h1 className="text-2xl font-bold mb-6">Create New Issue</h1>
 
       <div className="bg-white dark:bg-dark-elevated border border-gray-200 dark:border-dark-border-default rounded-lg shadow-sm p-6">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<IssueFormSkeleton />}>
           <NewIssue />
         </Suspense>
       </div>
