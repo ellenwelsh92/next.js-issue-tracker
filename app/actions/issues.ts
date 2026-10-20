@@ -3,6 +3,7 @@
 import { db } from '@/db'
 import { issues } from '@/db/schema'
 import { and, eq } from 'drizzle-orm'
+import { revalidatePath } from 'next/cache'
 import { getCurrentUser } from '@/lib/dal'
 import { IssueSchema, type IssueData } from '@/lib/validation/issues'
 import { mockDelay } from '@/lib/utils'
@@ -103,7 +104,7 @@ export const updateIssue = async (
     // Enforce ownership in the write itself, including requests with guessed IDs.
     const [updatedIssue] = await db
       .update(issues)
-      .set(updateData)
+      .set({ ...updateData, updatedAt: new Date() })
       .where(and(eq(issues.id, id), eq(issues.userId, user.id)))
       .returning()
 
@@ -114,6 +115,10 @@ export const updateIssue = async (
         error: 'Not found',
       }
     }
+
+    revalidatePath('/dashboard')
+    revalidatePath(`/issues/${id}`)
+    revalidatePath(`/issues/${id}/edit`)
 
     return { success: true, message: 'Issue updated successfully' }
   } catch (error) {

@@ -24,10 +24,12 @@ const mocks = vi.hoisted(() => ({
   delete: vi.fn(),
   deleteWhere: vi.fn(),
   deleteReturning: vi.fn(),
+  revalidatePath: vi.fn(),
 }))
 
 vi.mock('@/lib/auth', () => ({ getSession: mocks.getSession }))
 vi.mock('@/lib/utils', () => ({ mockDelay: vi.fn() }))
+vi.mock('next/cache', () => ({ revalidatePath: mocks.revalidatePath }))
 vi.mock('@/db', () => ({
   db: {
     select: () => ({ from: () => ({ where: mocks.selectUser }) }),
@@ -168,6 +170,7 @@ describe('private issue actions', () => {
       error: 'Not found',
     })
     expectOwnerFilter(mocks.updateWhere.mock.calls[0][0])
+    expect(mocks.revalidatePath).not.toHaveBeenCalled()
   })
 
   it('cannot delete another account’s issue by guessing its ID', async () => {
@@ -185,6 +188,15 @@ describe('private issue actions', () => {
     mocks.deleteReturning.mockResolvedValue([{ id: aliceIssue.id }])
 
     expect((await updateIssue(aliceIssue.id, { title: 'New title' })).success).toBe(true)
+    expect(mocks.updateSet).toHaveBeenCalledWith({
+      title: 'New title',
+      updatedAt: expect.any(Date),
+    })
+    expect(mocks.revalidatePath.mock.calls).toEqual([
+      ['/dashboard'],
+      [`/issues/${aliceIssue.id}`],
+      [`/issues/${aliceIssue.id}/edit`],
+    ])
     expect((await deleteIssue(aliceIssue.id)).success).toBe(true)
     for (const where of [
       mocks.updateWhere.mock.calls[0][0],
@@ -202,7 +214,10 @@ describe('private issue actions', () => {
     mocks.updateReturning.mockResolvedValue([{ id: aliceIssue.id }])
 
     expect((await updateIssue(aliceIssue.id, forgedData)).success).toBe(true)
-    expect(mocks.updateSet).toHaveBeenCalledWith({ title: 'New title' })
+    expect(mocks.updateSet).toHaveBeenCalledWith({
+      title: 'New title',
+      updatedAt: expect.any(Date),
+    })
   })
 
   it('rejects all writes without a session', async () => {

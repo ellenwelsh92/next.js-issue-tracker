@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { ChevronDown } from 'lucide-react'
 import React, { forwardRef } from 'react'
 
 // Form
@@ -93,22 +94,28 @@ interface FormSelectProps
 export const FormSelect = forwardRef<HTMLSelectElement, FormSelectProps>(
   ({ className, children, options, ...props }, ref) => {
     return (
-      <select
-        ref={ref}
-        className={cn(
-          'flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-border-medium dark:bg-[#222222] dark:text-gray-100',
-          className
-        )}
-        {...props}
-      >
-        {options
-          ? options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))
-          : children}
-      </select>
+      <div className="relative">
+        <select
+          ref={ref}
+          className={cn(
+            'peer flex h-10 w-full appearance-none rounded-md border border-gray-300 bg-white pl-3 pr-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-border-medium dark:bg-[#222222] dark:text-gray-100',
+            className
+          )}
+          {...props}
+        >
+          {options
+            ? options.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))
+            : children}
+        </select>
+        <ChevronDown
+          aria-hidden="true"
+          className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-700 peer-disabled:opacity-50 dark:text-gray-100"
+        />
+      </div>
     )
   }
 )

@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Issue, ISSUE_STATUS, ISSUE_PRIORITY } from '@/db/schema'
 import Button from './ui/Button'
@@ -31,6 +31,10 @@ export default function IssueForm({
   isEditing = false,
 }: IssueFormProps = {}) {
   const router = useRouter()
+  const [title, setTitle] = useState(issue?.title || '')
+  const [description, setDescription] = useState(issue?.description || '')
+  const [status, setStatus] = useState(issue?.status || 'backlog')
+  const [priority, setPriority] = useState(issue?.priority || 'medium')
 
   // Use useActionState hook for the form submission action
   const [state, formAction, isPending] = useActionState<
@@ -57,10 +61,8 @@ export default function IssueForm({
 
       // Handle successful submission
       if (result.success) {
+        router.push(isEditing ? `/issues/${issue!.id}` : '/dashboard')
         router.refresh()
-        if (!isEditing) {
-          router.push('/dashboard')
-        }
       }
 
       return result
@@ -72,6 +74,10 @@ export default function IssueForm({
       }
     }
   }, initialState)
+
+  const hasFieldErrors = Object.values(state.errors ?? {}).some(
+    (errors) => errors.length > 0
+  )
 
   const statusOptions = Object.values(ISSUE_STATUS).map(({ label, value }) => ({
     label,
@@ -87,7 +93,7 @@ export default function IssueForm({
 
   return (
     <Form action={formAction}>
-      {state?.message && (
+      {state?.message && !hasFieldErrors && (
         <FormError
           className={`mb-4 ${
             state.success ? 'bg-green-100 text-green-800 border-green-300' : ''
@@ -103,7 +109,8 @@ export default function IssueForm({
           id="title"
           name="title"
           placeholder="Issue title"
-          defaultValue={issue?.title || ''}
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
           required
           minLength={3}
           maxLength={100}
@@ -125,7 +132,8 @@ export default function IssueForm({
           name="description"
           placeholder="Describe the issue..."
           rows={4}
-          defaultValue={issue?.description || ''}
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
           disabled={isPending}
           aria-describedby="description-error"
           className={state?.errors?.description ? 'border-red-500' : ''}
@@ -143,7 +151,8 @@ export default function IssueForm({
           <FormSelect
             id="status"
             name="status"
-            defaultValue={issue?.status || 'backlog'}
+            value={status}
+            onChange={(event) => setStatus(event.target.value as Issue['status'])}
             options={statusOptions}
             disabled={isPending}
             required
@@ -162,7 +171,10 @@ export default function IssueForm({
           <FormSelect
             id="priority"
             name="priority"
-            defaultValue={issue?.priority || 'medium'}
+            value={priority}
+            onChange={(event) =>
+              setPriority(event.target.value as Issue['priority'])
+            }
             options={priorityOptions}
             disabled={isPending}
             required
@@ -181,7 +193,9 @@ export default function IssueForm({
         <Button
           type="button"
           variant="ghost"
-          onClick={() => router.back()}
+          onClick={() =>
+            isEditing ? router.push(`/issues/${issue!.id}`) : router.back()
+          }
           disabled={isPending}
         >
           Cancel
